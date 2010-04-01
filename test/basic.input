@@ -1,6 +1,12 @@
-" Tests for grex
-function s:test_gred_command()  "{{{1
-  Title ":Gred"
+" Common set up  "{{{1
+
+runtime! plugin/grex.vim
+
+
+
+
+function s:describe__gred_command()  "{{{1
+  It ":Gred"
 
   let content = [
   \     '#950 bugfix: jump behavior',
@@ -54,7 +60,7 @@ function s:test_gred_command()  "{{{1
 
   silent put =content
   1 delete _
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
     " :undobreak opposite of :undojoin.
   execute 'normal!' "i\<C-g>u\<Esc>"
 
@@ -65,16 +71,16 @@ function s:test_gred_command()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   Gred
-  Assert getline(1, '$') ==> content_bugfix_after
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix_deleted, "\n") . "\n"
+  Should getline(1, '$') ==# content_bugfix_after
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix_deleted, "\n") . "\n"
     " FIXME: :help grex-bugs-C
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " Typical usage #2
   let @/ = 'or'
@@ -83,16 +89,16 @@ function s:test_gred_command()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   Gred
-  Assert getline(1, '$') ==> content_or_after
-  Assert @/ ==> 'or'
-  Assert @" ==> join(content_or_deleted, "\n") . "\n"
+  Should getline(1, '$') ==# content_or_after
+  Should @/ ==# 'or'
+  Should @" ==# join(content_or_deleted, "\n") . "\n"
     " FIXME: :help grex-bugs-C
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " With range
   let @/ = 'bugfix:'
@@ -101,16 +107,16 @@ function s:test_gred_command()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   1,6 Gred
-  Assert getline(1, '$') ==> content_bugfix2_after
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix2_deleted, "\n") . "\n"
+  Should getline(1, '$') ==# content_bugfix2_after
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix2_deleted, "\n") . "\n"
     " FIXME: :help grex-bugs-C
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " No match
   let @/ = 'Super Super Mega Kawaii'
@@ -119,23 +125,23 @@ function s:test_gred_command()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   Gred
-  Assert getline(1, '$') ==> content
-  Assert @/ ==> 'Super Super Mega Kawaii'
-  Assert @" ==> ''
+  Should getline(1, '$') ==# content
+  Should @/ ==# 'Super Super Mega Kawaii'
+  Should @" ==# ''
     " FIXME: :help grex-bugs-C
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> ['']
+  Should getline(1, '$') ==# ['']
 endfunction
 
 
 
 
-function s:test_gred_function()  "{{{1
-  Title "grex#delete()"
+function s:describe__gred_function()  "{{{1
+  It "grex#delete()"
 
   let content = [
   \     '#950 bugfix: jump behavior',
@@ -201,7 +207,7 @@ function s:test_gred_function()  "{{{1
 
   silent put =content
   1 delete _
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
     " :undobreak opposite of :undojoin.
   execute 'normal!' "i\<C-g>u\<Esc>"
 
@@ -212,16 +218,16 @@ function s:test_gred_function()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   % call grex#delete()
-  Assert getline(1, '$') ==> content_bugfix_after
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix_deleted, "\n") . "\n"
+  Should getline(1, '$') ==# content_bugfix_after
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix_deleted, "\n") . "\n"
     " FIXME: :help grex-bugs-C
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " Typical usage #2
   let @/ = 'or'
@@ -230,16 +236,16 @@ function s:test_gred_function()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   % call grex#delete()
-  Assert getline(1, '$') ==> content_or_after
-  Assert @/ ==> 'or'
-  Assert @" ==> join(content_or_deleted, "\n") . "\n"
+  Should getline(1, '$') ==# content_or_after
+  Should @/ ==# 'or'
+  Should @" ==# join(content_or_deleted, "\n") . "\n"
     " FIXME: :help grex-bugs-C
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " With a limited range
   let @/ = 'bugfix:'
@@ -248,16 +254,16 @@ function s:test_gred_function()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   1,6 call grex#delete()
-  Assert getline(1, '$') ==> content_bugfix2_after
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix2_deleted, "\n") . "\n"
+  Should getline(1, '$') ==# content_bugfix2_after
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix2_deleted, "\n") . "\n"
     " FIXME: :help grex-bugs-C
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " No match
   let @/ = 'Super Super Mega Kawaii'
@@ -266,18 +272,18 @@ function s:test_gred_function()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   % call grex#delete()
-  Assert getline(1, '$') ==> content
-  Assert @/ ==> 'Super Super Mega Kawaii'
-  Assert @" ==> ''
+  Should getline(1, '$') ==# content
+  Should @/ ==# 'Super Super Mega Kawaii'
+  Should @" ==# ''
     " FIXME: :help grex-bugs-C
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> ['']
+  Should getline(1, '$') ==# ['']
   silent redo
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " No range
   let @/ = 'bugfix:'
@@ -287,23 +293,23 @@ function s:test_gred_function()  "{{{1
   1
   let cursor_position = getpos('.')
   call grex#delete()
-  Assert getline(1, '$') ==> content_bugfix1_after
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix1_deleted, "\n") . "\n"
+  Should getline(1, '$') ==# content_bugfix1_after
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix1_deleted, "\n") . "\n"
     " FIXME: :help grex-bugs-C
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 endfunction
 
 
 
 
-function s:test_gred_operator()  "{{{1
-  Title "<Plug>(operator-grex-delete)"
+function s:describe__gred_operator()  "{{{1
+  It "<Plug>(operator-grex-delete)"
 
   let content = [
   \     '#950 bugfix: jump behavior',
@@ -357,7 +363,7 @@ function s:test_gred_operator()  "{{{1
 
   silent put =content
   1 delete _
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
     " :undobreak opposite of :undojoin.
   execute 'normal!' "i\<C-g>u\<Esc>"
 
@@ -368,16 +374,16 @@ function s:test_gred_operator()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   execute 'normal' "gg\<Plug>(operator-grex-delete)G"
-  Assert getline(1, '$') ==> content_bugfix_after
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix_deleted, "\n") . "\n"
+  Should getline(1, '$') ==# content_bugfix_after
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix_deleted, "\n") . "\n"
     " FIXME: :help grex-bugs-C
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " In Visual mode
   let @/ = 'or'
@@ -386,16 +392,16 @@ function s:test_gred_operator()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   execute 'normal' "ggvG\<Plug>(operator-grex-delete)"
-  Assert getline(1, '$') ==> content_or_after
-  Assert @/ ==> 'or'
+  Should getline(1, '$') ==# content_or_after
+  Should @/ ==# 'or'
     " FIXME: :help grex-bugs-C
-  Assert @" ==> join(content_or_deleted, "\n") . "\n"
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @" ==# join(content_or_deleted, "\n") . "\n"
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " With count
   let @/ = 'bugfix:'
@@ -404,16 +410,16 @@ function s:test_gred_operator()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   execute 'normal' "gg\<Plug>(operator-grex-delete)6g@"
-  Assert getline(1, '$') ==> content_bugfix2_after
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix2_deleted, "\n") . "\n"
+  Should getline(1, '$') ==# content_bugfix2_after
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix2_deleted, "\n") . "\n"
     " FIXME: :help grex-bugs-C
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " No match
   let @/ = 'Super Super Mega Kawaii'
@@ -422,23 +428,23 @@ function s:test_gred_operator()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   execute 'normal' "gg\<Plug>(operator-grex-delete)G"
-  Assert getline(1, '$') ==> content
-  Assert @/ ==> 'Super Super Mega Kawaii'
-  Assert @" ==> ''
+  Should getline(1, '$') ==# content
+  Should @/ ==# 'Super Super Mega Kawaii'
+  Should @" ==# ''
     " FIXME: :help grex-bugs-C
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> ['']
+  Should getline(1, '$') ==# ['']
 endfunction
 
 
 
 
-function s:test_grey_command()  "{{{1
-  Title ":Grey"
+function s:describe__grey_command()  "{{{1
+  It ":Grey"
 
   let content = [
   \     '#950 bugfix: jump behavior',
@@ -469,7 +475,7 @@ function s:test_grey_command()  "{{{1
 
   silent put =content
   1 delete _
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " Typical usage #1
   let @/ = 'bugfix:'
@@ -478,12 +484,12 @@ function s:test_grey_command()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   Grey
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix, "\n") . "\n"
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix, "\n") . "\n"
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
 
   " Typical usage #2
   let @/ = 'or'
@@ -492,12 +498,12 @@ function s:test_grey_command()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   Grey
-  Assert @/ ==> 'or'
-  Assert @" ==> join(content_or, "\n") . "\n"
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @/ ==# 'or'
+  Should @" ==# join(content_or, "\n") . "\n"
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
 
   " With range
   let @/ = 'bugfix:'
@@ -506,12 +512,12 @@ function s:test_grey_command()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   1,6 Grey
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix2, "\n") . "\n"
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix2, "\n") . "\n"
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
 
   " No match
   let @/ = 'Super Super Mega Kawaii'
@@ -520,19 +526,19 @@ function s:test_grey_command()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   Grey
-  Assert @/ ==> 'Super Super Mega Kawaii'
-  Assert @" ==> ''
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @/ ==# 'Super Super Mega Kawaii'
+  Should @" ==# ''
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
 endfunction
 
 
 
 
-function s:test_grey_function()  "{{{1
-  Title "grex#yank()"
+function s:describe__grey_function()  "{{{1
+  It "grex#yank()"
 
   let content = [
   \     '#950 bugfix: jump behavior',
@@ -566,7 +572,7 @@ function s:test_grey_function()  "{{{1
 
   silent put =content
   1 delete _
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " Typical usage #1
   let @/ = 'bugfix:'
@@ -575,12 +581,12 @@ function s:test_grey_function()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   % call grex#yank()
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix, "\n") . "\n"
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix, "\n") . "\n"
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
 
   " Typical usage #2
   let @/ = 'or'
@@ -589,12 +595,12 @@ function s:test_grey_function()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   % call grex#yank()
-  Assert @/ ==> 'or'
-  Assert @" ==> join(content_or, "\n") . "\n"
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @/ ==# 'or'
+  Should @" ==# join(content_or, "\n") . "\n"
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
 
   " With a limited range
   let @/ = 'bugfix:'
@@ -603,12 +609,12 @@ function s:test_grey_function()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   1,6 call grex#yank()
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix2, "\n") . "\n"
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix2, "\n") . "\n"
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
 
   " No match
   let @/ = 'Super Super Mega Kawaii'
@@ -617,12 +623,12 @@ function s:test_grey_function()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   % call grex#yank()
-  Assert @/ ==> 'Super Super Mega Kawaii'
-  Assert @" ==> ''
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @/ ==# 'Super Super Mega Kawaii'
+  Should @" ==# ''
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
 
   " No range
   let @/ = 'bugfix:'
@@ -632,19 +638,19 @@ function s:test_grey_function()  "{{{1
   1
   let cursor_position = getpos('.')
   call grex#yank()
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix1, "\n") . "\n"
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix1, "\n") . "\n"
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
 endfunction
 
 
 
 
-function s:test_grey_operator()  "{{{1
-  Title "<Plug>(operator-grex-yank)"
+function s:describe__grey_operator()  "{{{1
+  It "<Plug>(operator-grex-yank)"
 
   let content = [
   \     '#950 bugfix: jump behavior',
@@ -675,7 +681,7 @@ function s:test_grey_operator()  "{{{1
 
   silent put =content
   1 delete _
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " With {motion}
   let @/ = 'bugfix:'
@@ -684,12 +690,12 @@ function s:test_grey_operator()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   execute 'normal' "gg\<Plug>(operator-grex-yank)G"
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix, "\n") . "\n"
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix, "\n") . "\n"
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
 
   " In Visual mode
   let @/ = 'or'
@@ -698,12 +704,12 @@ function s:test_grey_operator()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   execute 'normal' "ggvG\<Plug>(operator-grex-yank)"
-  Assert @/ ==> 'or'
-  Assert @" ==> join(content_or, "\n") . "\n"
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @/ ==# 'or'
+  Should @" ==# join(content_or, "\n") . "\n"
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
 
   " With count
   let @/ = 'bugfix:'
@@ -712,12 +718,12 @@ function s:test_grey_operator()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   execute 'normal' "gg\<Plug>(operator-grex-yank)6g@"
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> join(content_bugfix2, "\n") . "\n"
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @/ ==# 'bugfix:'
+  Should @" ==# join(content_bugfix2, "\n") . "\n"
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
 
   " No match
   let @/ = 'Super Super Mega Kawaii'
@@ -726,19 +732,19 @@ function s:test_grey_operator()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   execute 'normal' "gg\<Plug>(operator-grex-yank)G"
-  Assert @/ ==> 'Super Super Mega Kawaii'
-  Assert @" ==> ''
-  Assert @0 ==> @"
-  Assert @g ==> 'ggg'
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should @/ ==# 'Super Super Mega Kawaii'
+  Should @" ==# ''
+  Should @0 ==# @"
+  Should @g ==# 'ggg'
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
 endfunction
 
 
 
 
-function s:test_operator_register_designation()  "{{{1
-  Title "Operators with register designation"
+function s:describe__operator_register_designation()  "{{{1
+  It "Operators with register designation"
 
   let content = [
   \     '#950 bugfix: jump behavior',
@@ -780,7 +786,7 @@ function s:test_operator_register_designation()  "{{{1
 
   silent put =content
   1 delete _
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
     " :undobreak opposite of :undojoin.
   execute 'normal!' "i\<C-g>u\<Esc>"
 
@@ -792,16 +798,16 @@ function s:test_operator_register_designation()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   execute 'normal' "gg\"x\<Plug>(operator-grex-delete)G"
-  Assert getline(1, '$') ==> content_bugfix_after
-  Assert @/ ==> 'bugfix:'
-  Assert @" ==> @0
-  Assert @0 ==> '000'
-  Assert @g ==> 'ggg'
-  Assert @x ==> join(content_bugfix_deleted, "\n") . "\n"
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should getline(1, '$') ==# content_bugfix_after
+  Should @/ ==# 'bugfix:'
+  Should @" ==# @0
+  Should @0 ==# '000'
+  Should @g ==# 'ggg'
+  Should @x ==# join(content_bugfix_deleted, "\n") . "\n"
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 
   " grey with register designation
   let @/ = 'or'
@@ -811,24 +817,22 @@ function s:test_operator_register_designation()  "{{{1
   call setreg('g', 'ggg', 'b')
   let cursor_position = getpos('.')
   execute 'normal' "ggvG\"x\<Plug>(operator-grex-yank)"
-  Assert getline(1, '$') ==> content
-  Assert @/ ==> 'or'
-  Assert @" ==> @0
-  Assert @0 ==> '000'
-  Assert @g ==> 'ggg'
-  Assert @x ==> join(content_or_deleted, "\n") . "\n"
-  Assert getregtype('g') ==> "\<C-v>3"
-  Assert getpos('.') ==> cursor_position
+  Should getline(1, '$') ==# content
+  Should @/ ==# 'or'
+  Should @" ==# @0
+  Should @0 ==# '000'
+  Should @g ==# 'ggg'
+  Should @x ==# join(content_or_deleted, "\n") . "\n"
+  Should getregtype('g') ==# "\<C-v>3"
+  Should getpos('.') ==# cursor_position
   silent undo
-  Assert getline(1, '$') ==> ['']
+  Should getline(1, '$') ==# ['']
   silent redo
-  Assert getline(1, '$') ==> content
+  Should getline(1, '$') ==# content
 endfunction
 
 
 
 
-Test  "{{{1
-
-" __END__
+" __END__  "{{{1
 " vim: filetype=vim foldmethod=marker
