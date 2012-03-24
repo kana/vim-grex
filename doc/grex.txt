@@ -1,6 +1,6 @@
 *grex.txt*	Operate on lines matched to the last search pattern (:g/re/x)
 
-Version 0.0.1
+Version 0.0.2
 Script ID: 2773
 Copyright (C) 2009 kana <http://whileimautomaton.net/>
 License: MIT license  {{{
@@ -156,6 +156,9 @@ and |grex-operators|.
 
 ==============================================================================
 CHANGELOG					*grex-changelog*
+
+0.0.2	2012-03-24T13:58:41+09:00		*grex-changelog-0.0.2*
+	- Refine the document and tests a bit.
 
 0.0.1	2009-09-08T13:06:06+09:00		*grex-changelog-0.0.1*
 	Feature enhancements:
